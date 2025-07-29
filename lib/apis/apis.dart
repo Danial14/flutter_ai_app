@@ -3,27 +3,36 @@ import 'dart:io';
 
 import 'package:flutter_ai_app/helper/global.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/gemini_text_response_model.dart';
 class APIs{
   static void getAnswer(String question) async{
     print("get answer called");
     try{
-      var res = await http.post(Uri.parse("https://api.openai.com/v1/chat/completions"), headers: {
+      var res = await http.post(Uri.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"), headers: {
         HttpHeaders.contentTypeHeader : "application/json",
-        HttpHeaders.authorizationHeader : "Bearer ${CHATGPTAPIKEY}"
+        "X-goog-api-key" : "${GEMINIAPIKEY}"
       },
       body: jsonEncode({
-        "model": "gpt-3.5-turbo",
-        "messages": [
+        "contents": [
           {
-            "role": "user",
-            "content": question
+            "parts": [
+              {
+                "text": question
+              }
+            ]
           }
         ]
       })
       );
       if(res.statusCode == 200){
-        print("chatgpt response");
-        print(jsonDecode(res.body));
+        print("gemini response");
+        GeminiTextGenerationResponse geminiTextGenerationResponse = GeminiTextGenerationResponse.fromJson(jsonDecode(res.body));
+        geminiTextGenerationResponse.candidates?.map((candidate){
+          candidate.content?.parts?.map((part){
+            print(part.text);
+          }).toList();
+        }).toList();
       }
       else{
         print("req not sent ${res.body}");
