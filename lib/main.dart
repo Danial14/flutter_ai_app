@@ -42,6 +42,19 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        appBarTheme: AppBarTheme(
+          elevation: 1,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(
+            color: Colors.blue
+          ),
+          titleTextStyle: TextStyle(
+            color: Colors.blue,
+            fontSize: 20,
+            fontWeight: FontWeight.w500
+          )
+        )
       ),
       home: SplashScreen(),
     );

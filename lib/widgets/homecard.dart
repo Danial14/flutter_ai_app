@@ -18,33 +18,37 @@ class Homecard extends StatelessWidget {
           Radius.circular(20)
         )
       ),
-      child: homeType.leftAlign ? Row(
-        children: [
-          Spacer(),
-          Text(homeType.title,
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        onTap: homeType.onTap,
+        child: homeType.leftAlign ? Row(
+          children: [
+            Spacer(),
+            Text(homeType.title,
+              style: TextStyle(
+                  letterSpacing: 1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Lottie.asset("assets/lottie/${homeType.lottie}.json", width: size.width * 0.35, height: size.height * 0.14),
+            ),
+          ],
+        ) : Row(
+          children: [
+            Lottie.asset("assets/lottie/${homeType.lottie}.json", width: size.width * 0.35),
+            Text(homeType.title,
             style: TextStyle(
                 letterSpacing: 1,
                 fontWeight: FontWeight.w500,
                 fontSize: 18
             ),
-          ),
-          Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Lottie.asset("assets/lottie/${homeType.lottie}.json", width: size.width * 0.35, height: size.height * 0.14),
-          ),
-        ],
-      ) : Row(
-        children: [
-          Lottie.asset("assets/lottie/${homeType.lottie}.json", width: size.width * 0.35),
-          Text(homeType.title,
-          style: TextStyle(
-              letterSpacing: 1,
-              fontWeight: FontWeight.w500,
-              fontSize: 18
-          ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     ).animate().shake(duration: Duration(seconds : 5), curve: Curves.ease);
   }
