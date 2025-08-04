@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_app/controllers/chat_controller.dart';
+import "package:get/get.dart";
+
 
 class ChatbotFeature extends StatefulWidget {
   const ChatbotFeature({super.key});
@@ -9,25 +12,53 @@ class ChatbotFeature extends StatefulWidget {
 }
 
 class _ChatbotFeatureState extends State<ChatbotFeature>{
+  final _chatController = ChatController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: Row(
-        children: [
-          Expanded(child: TextFormField(
-            onTapOutside: (e){
-              FocusScope.of(context).unfocus();
-            },
-          ))
-        ],
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Row(
+            children: [
+              SizedBox(width: 10,),
+              Expanded(child: TextFormField(
+                textAlign: TextAlign.center,
+                controller: _chatController.textController,
+                onTapOutside: (e){
+                  FocusScope.of(context).unfocus();
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(50))
+                  ),
+                  hintText: "Ask me something"
+                ),
+              ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              CircleAvatar(
+                radius: 24,
+                child: IconButton(onPressed: _chatController.askQuestion, icon: Icon(
+                  Icons.rocket_launch,
+                  size: 28,
+                  color: Colors.white,
+                )),
+                backgroundColor: Colors.blue,
+              )
+            ],
+        ),
       ),
         appBar : AppBar(
             title : const Text("Chat with AI Assistant")
         ),
-        body : ListView(
-            children : [
-
-            ]
+        body : Obx(
+            () => ListView(
+              children : _chatController.messages.map((message){
+                return Text(message.msg);
+              }).toList()
+          ),
         )
     );
   }

@@ -20,7 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     Prefs.onBoarding = false;
-    APIs.getAnswer("What is Artificial Intelligence");
   }
   @override
   Widget build(BuildContext context) {
