@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_app/controllers/chat_controller.dart';
+import 'package:flutter_ai_app/widgets/message_card.dart';
 import "package:get/get.dart";
 
 
@@ -15,6 +16,7 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
   final _chatController = ChatController();
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -55,8 +57,12 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
         ),
         body : Obx(
             () => ListView(
+              padding: EdgeInsets.only(
+                top: size.height * .02,
+                bottom: size.width * .01
+              ),
               children : _chatController.messages.map((message){
-                return Text(message.msg);
+                return MessageCard(message: message);
               }).toList()
           ),
         )

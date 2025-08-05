@@ -11,5 +11,6 @@ class ChatController extends GetxController{
       messages.add(Message(msg: textController.text, msgType: MessageType.user));
       messages.add(Message(msg: "I recieved your message", msgType: MessageType.bot));
     }
+    textController.text = "";
   }
 }
