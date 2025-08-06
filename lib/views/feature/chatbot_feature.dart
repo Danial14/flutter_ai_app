@@ -24,16 +24,23 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
             children: [
               SizedBox(width: 10,),
               Expanded(child: TextFormField(
+                style: TextStyle(
+                  color: Colors.white
+                ),
                 textAlign: TextAlign.center,
                 controller: _chatController.textController,
                 onTapOutside: (e){
                   FocusScope.of(context).unfocus();
                 },
                 decoration: InputDecoration(
+                  isDense : true,
+                  fillColor: Colors.black,
+                  filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(50))
                   ),
-                  hintText: "Ask me something"
+                  hintText: "Ask me something",
+                  hintStyle: TextStyle(color: Colors.white)
                 ),
               ),
               ),
@@ -57,6 +64,7 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
         ),
         body : Obx(
             () => ListView(
+              physics: BouncingScrollPhysics(),
               padding: EdgeInsets.only(
                 top: size.height * .02,
                 bottom: size.width * .01

@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 
 import '../models/gemini_text_response_model.dart';
 class APIs{
-  static void getAnswer(String question) async{
+  static Future<String> getAnswer(String question) async{
+    String response = "";
     print("get answer called");
     try{
       var res = await http.post(Uri.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"), headers: {
@@ -30,7 +31,7 @@ class APIs{
         GeminiTextGenerationResponse geminiTextGenerationResponse = GeminiTextGenerationResponse.fromJson(jsonDecode(res.body));
         geminiTextGenerationResponse.candidates?.map((candidate){
           candidate.content?.parts?.map((part){
-            print(part.text);
+            response = part.text!;
           }).toList();
         }).toList();
       }
@@ -42,5 +43,6 @@ class APIs{
       print("error");
       print(e);
     }
+    return response;
   }
 }
