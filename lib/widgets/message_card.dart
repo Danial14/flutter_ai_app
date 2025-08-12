@@ -44,10 +44,24 @@ class MessageCard extends StatelessWidget {
             repeatForever : true
           )
           :
-              Text(
+              /*Text(
                 message.msg,
                 textAlign: TextAlign.center,
-              )
+              )*/
+          DefaultTextStyle(
+            style: TextStyle(color: Colors.black),
+            child: AnimatedTextKit(
+              isRepeatingAnimation: false,
+              totalRepeatCount: 1,
+              pause: Duration.zero,
+              animatedTexts: [
+                TypewriterAnimatedText(
+                  message.msg,
+                  speed: const Duration(milliseconds: 100)
+                )
+              ]
+            ),
+          )
           ,
         )
       ],
