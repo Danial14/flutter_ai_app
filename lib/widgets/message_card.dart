@@ -4,7 +4,10 @@ import 'package:flutter_ai_app/models/message.dart';
 
 class MessageCard extends StatelessWidget {
   final Message message;
-  const MessageCard({super.key, required this.message});
+  late bool _showAnimatedText;
+  MessageCard(bool showAnimatedText, {super.key, required this.message}){
+    _showAnimatedText = showAnimatedText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +47,12 @@ class MessageCard extends StatelessWidget {
             repeatForever : true
           )
           :
-              /*Text(
-                message.msg,
-                textAlign: TextAlign.center,
-              )*/
-          DefaultTextStyle(
+          _showAnimatedText ? DefaultTextStyle(
             style: TextStyle(color: Colors.black),
             child: AnimatedTextKit(
+              onFinished: (){
+                _showAnimatedText = false;
+              },
               isRepeatingAnimation: false,
               totalRepeatCount: 1,
               pause: Duration.zero,
@@ -61,6 +63,11 @@ class MessageCard extends StatelessWidget {
                 )
               ]
             ),
+          )
+              :
+          Text(
+            message.msg,
+            textAlign: TextAlign.center,
           )
           ,
         )

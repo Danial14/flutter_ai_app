@@ -63,16 +63,26 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
             title : const Text("Chat with AI Assistant")
         ),
         body : Obx(
-            () => ListView(
+            () => ListView.builder(
               controller: _chatController.scrollController,
               physics: BouncingScrollPhysics(),
               padding: EdgeInsets.only(
                 top: size.height * .02,
                 bottom: size.width * .01
               ),
-              children : _chatController.messages.map((message){
-                return MessageCard(message: message);
-              }).toList()
+              itemBuilder : (context, position){
+                if(position == _chatController.messages.length - 1) {
+                  return MessageCard(
+                      message: _chatController.messages[position], true
+                  );
+                }
+                else{
+                  return MessageCard(
+                      message: _chatController.messages[position], false
+                  );
+                }
+              },
+              itemCount: _chatController.messages.length,
           ),
         )
     );
