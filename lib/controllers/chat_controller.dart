@@ -4,6 +4,7 @@ import "package:flutter_ai_app/models/message.dart";
 import "package:get/get.dart";
 
 class ChatController extends GetxController{
+  static bool isFirstTimeAnimating = true;
   final textController = TextEditingController();
   final scrollController = ScrollController();
   final RxList<Message> messages = <Message>[
@@ -17,6 +18,7 @@ class ChatController extends GetxController{
       _scrollDown();
       final res = await APIs.getAnswer(textController.text);
       messages.removeLast();
+      ChatController.isFirstTimeAnimating = true;
       messages.add(Message(msg: res, msgType: MessageType.bot));
       _scrollDown();
     }

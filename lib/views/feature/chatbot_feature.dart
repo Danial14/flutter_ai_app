@@ -16,6 +16,7 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
   final _chatController = ChatController();
   @override
   Widget build(BuildContext context) {
+    print("build chatbot feature");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: Padding(
@@ -71,10 +72,13 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
                 bottom: size.width * .01
               ),
               itemBuilder : (context, position){
+                print("ListView build");
                 if(position == _chatController.messages.length - 1) {
-                  return MessageCard(
-                      message: _chatController.messages[position], true
+                  Widget messageCard = MessageCard(
+                      message: _chatController.messages[position], ChatController.isFirstTimeAnimating
                   );
+                  ChatController.isFirstTimeAnimating = false;
+                  return messageCard;
                 }
                 else{
                   return MessageCard(
