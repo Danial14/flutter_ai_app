@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ai_app/controllers/chat_controller.dart';
 import 'package:flutter_ai_app/widgets/message_card.dart';
 import "package:get/get.dart";
+import 'package:flutter_gemini/flutter_gemini.dart';
 
 
 class ChatbotFeature extends StatefulWidget {
@@ -16,6 +17,7 @@ class _ChatbotFeatureState extends State<ChatbotFeature>{
   final _chatController = ChatController();
   @override
   Widget build(BuildContext context) {
+
     print("build chatbot feature");
     Size size = MediaQuery.of(context).size;
     return Scaffold(
