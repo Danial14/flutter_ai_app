@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import '../models/lottie_model.dart';
+import '../widgets/custom_button.dart';
 
 class Onboarding extends StatelessWidget {
   Onboarding({super.key});
@@ -64,25 +65,15 @@ class Onboarding extends StatelessWidget {
                   }),
                 ),
                 const Spacer(),
-                ElevatedButton(onPressed: (){
-                  isLast ? /*Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx){
+                CustomButton(
+                  onTap: (){
+                    isLast ? /*Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx){
                     return HomeScreen();
                   }))*/ Get.off((){
-                    return HomeScreen();
-                  }): _pageController.nextPage(duration: Duration(seconds: 2), curve: Curves.ease);
-                },
-                  style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    elevation: 0,
-                    backgroundColor: Colors.blueAccent,
-                    minimumSize: Size(size.width * .4, 40)
-                  ),
-                  child: Text(isLast ? "Finish" : "Next", style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white
-                  ),
-                  ),
+                      return HomeScreen();
+                    }): _pageController.nextPage(duration: Duration(seconds: 2), curve: Curves.ease);
+                  },
+                  text: isLast ? "Finish" : "Next",
                 ),
                 const Spacer(flex: 2,)
               ],
