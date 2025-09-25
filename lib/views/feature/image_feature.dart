@@ -72,14 +72,17 @@ class _ImageFeatureState extends State<ImageFeature> {
     return switch(_imageController.status.value){
       imageStatus.none => Lottie.asset("assets/lottie/ai_play.json", height: _size!.height * 0.3),
     imageStatus.loading => CustomLoading(),
-    imageStatus.completed => CachedNetworkImage(
-      imageUrl: _imageController.imageUrl,
-      errorWidget: (_, _, _){
-        return SizedBox();
-      },
-      placeholder: (_, _){
-        return CustomLoading();
-      },
+    imageStatus.completed => ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: CachedNetworkImage(
+        imageUrl: _imageController.imageUrl,
+        errorWidget: (_, _, _){
+          return SizedBox();
+        },
+        placeholder: (_, _){
+          return CustomLoading();
+        },
+      ),
     )
     };
  }
