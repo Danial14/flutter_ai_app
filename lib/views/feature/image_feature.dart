@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_app/controllers/image_controller.dart';
+import 'package:flutter_ai_app/widgets/custom_loading.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../widgets/custom_button.dart';
 
@@ -13,9 +16,10 @@ class ImageFeature extends StatefulWidget {
 
 class _ImageFeatureState extends State<ImageFeature> {
   final ImageController _imageController = ImageController();
+  Size? _size;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    _size = MediaQuery.of(context).size;
     return Scaffold(
         appBar : AppBar(
             title : const Text("AI Image Creator")
@@ -24,10 +28,10 @@ class _ImageFeatureState extends State<ImageFeature> {
             //controller: _chatController.scrollController,
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.only(
-                top: size.height * .02,
-                bottom: size.width * .01,
-              right: size.width * .04,
-              left: size.width * .04
+                top: _size!.height * .02,
+                bottom: _size!.width * .01,
+              right: _size!.width * .04,
+              left: _size!.width * .04
             ),
             children : [
               TextFormField(
@@ -50,18 +54,33 @@ class _ImageFeatureState extends State<ImageFeature> {
                 ),
               ),
               Container(
-                height: size.height * 0.5,
+                height: _size!.height * 0.5,
                   alignment: Alignment.center,
-                  child: Lottie.asset("assets/lottie/ai_play.json", height: size.height * 0.3)
+                  child: Obx((){
+                    return _aiImageWidget();
+                  })
               ),
               CustomButton(
-                onTap: (){
-
-                },
+                onTap: _imageController.askQuestion,
                 text: "Create",
               )
             ]
         )
     );
   }
+ Widget _aiImageWidget(){
+    return switch(_imageController.status.value){
+      imageStatus.none => Lottie.asset("assets/lottie/ai_play.json", height: _size!.height * 0.3),
+    imageStatus.loading => CustomLoading(),
+    imageStatus.completed => CachedNetworkImage(
+      imageUrl: _imageController.imageUrl,
+      errorWidget: (_, _, _){
+        return SizedBox();
+      },
+      placeholder: (_, _){
+        return CustomLoading();
+      },
+    )
+    };
+ }
 }
