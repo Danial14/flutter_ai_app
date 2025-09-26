@@ -44,6 +44,8 @@ dependencies:
   animated_text_kit: ^4.2.3
   cached_network_image: ^3.4.1
   flutter_gemini: ^3.0.0
+  #gallery_saver_updated: ^3.0.0
+  image_gallery_saver_plus: ^4.0.1
 
 dev_dependencies:
   flutter_test:

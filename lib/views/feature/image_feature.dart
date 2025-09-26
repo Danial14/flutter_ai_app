@@ -65,7 +65,23 @@ class _ImageFeatureState extends State<ImageFeature> {
                 text: "Create",
               )
             ]
-        )
+        ),
+      floatingActionButton: Obx((){
+        return _imageController.status.value == imageStatus.completed ? Padding(padding: const EdgeInsets.only(
+          right: 6,
+          bottom: 6,
+        ),
+        child: FloatingActionButton(onPressed: _imageController.downloadImage,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20)
+          ),
+          backgroundColor: Colors.blueAccent,
+          child: const Icon(Icons.save_alt_rounded, size: 26, color: Colors.white,),
+        ),
+        ) :
+        SizedBox()
+        ;
+      })
     );
   }
  Widget _aiImageWidget(){

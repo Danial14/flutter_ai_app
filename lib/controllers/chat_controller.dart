@@ -3,6 +3,8 @@ import "package:flutter_ai_app/apis/apis.dart";
 import "package:flutter_ai_app/models/message.dart";
 import "package:get/get.dart";
 
+import "../helper/mydialog.dart";
+
 class ChatController extends GetxController{
   static bool isFirstTimeAnimating = true;
   final textController = TextEditingController();
@@ -21,8 +23,11 @@ class ChatController extends GetxController{
       ChatController.isFirstTimeAnimating = true;
       messages.add(Message(msg: res, msgType: MessageType.bot));
       _scrollDown();
+      textController.text = "";
     }
-    textController.text = "";
+    else{
+      MyDialog.showInfoDialog("Please ask something");
+    }
   }
   void _scrollDown(){
     scrollController.animateTo(scrollController.position.maxScrollExtent * 1.4, duration: const Duration(milliseconds: 100), curve: Curves.ease);
