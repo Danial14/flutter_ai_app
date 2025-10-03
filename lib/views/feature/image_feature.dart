@@ -22,7 +22,18 @@ class _ImageFeatureState extends State<ImageFeature> {
     _size = MediaQuery.of(context).size;
     return Scaffold(
         appBar : AppBar(
-            title : const Text("AI Image Creator")
+            title : const Text("AI Image Creator"),
+          actions: [
+            Obx((){
+              return _imageController.status.value == imageStatus.completed ? IconButton(
+                padding: EdgeInsets.only(right: 6),
+                onPressed: (){
+                  _imageController.shareImage();
+                },
+                icon: Icon(Icons.share),
+              ) : SizedBox();
+            })
+          ],
         ),
         body : ListView(
             //controller: _chatController.scrollController,
@@ -76,7 +87,11 @@ class _ImageFeatureState extends State<ImageFeature> {
               borderRadius: BorderRadius.circular(20)
           ),
           backgroundColor: Colors.blueAccent,
-          child: const Icon(Icons.save_alt_rounded, size: 26, color: Colors.white,),
+          child: Obx((){
+            return _imageController.downloadingAndSharingStatus.value == imageDownloadingAndSharingStatus.downloading ? CircularProgressIndicator()
+                :
+            Icon(Icons.download);
+          })
         ),
         ) :
         SizedBox()
@@ -99,7 +114,7 @@ class _ImageFeatureState extends State<ImageFeature> {
           return CustomLoading();
         },
       ),
-    )
+    ),
     };
  }
 }

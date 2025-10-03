@@ -46,6 +46,7 @@ dependencies:
   flutter_gemini: ^3.0.0
   #gallery_saver_updated: ^3.0.0
   image_gallery_saver_plus: ^4.0.1
+  share_plus: ^12.0.0
 
 dev_dependencies:
   flutter_test:
