@@ -5,7 +5,6 @@ import 'package:flutter_ai_app/models/message.dart';
 class MessageCard extends StatelessWidget {
   final Message message;
   late bool _showAnimatedText;
-  late bool _isBuildFirstTime;
   MessageCard(bool showAnimatedText, {super.key, required this.message}){
     _showAnimatedText = showAnimatedText;
     print("MessageCard build");
