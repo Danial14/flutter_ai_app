@@ -12,13 +12,14 @@ import 'package:cross_file/cross_file.dart';
 import "../helper/global.dart";
 
 enum imageStatus {none, loading, completed}
-enum imageDownloadingAndSharingStatus {none, downloading, sharing}
 class ImageController extends GetxController{
+  RxBool _imageDownloading = false.obs;
+  RxBool _imageSharing = false.obs;
   final status = imageStatus.none.obs;
-  final downloadingAndSharingStatus = imageDownloadingAndSharingStatus.none.obs;
   static bool isFirstTimeAnimating = true;
   final textController = TextEditingController();
   String imageUrl = "";
+  var imageFile;
   void askQuestion() async{
     try {
       if (textController.text
@@ -78,7 +79,7 @@ class ImageController extends GetxController{
   }
   Future<void> downloadImage() async{
     try{
-      downloadingAndSharingStatus.value = imageDownloadingAndSharingStatus.downloading;
+      _imageDownloading.value = true;
       var imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
       var result = await ImageGallerySaverPlus.saveImage(imageBytes, name: "ai_generated_image");
       print(result);
@@ -87,14 +88,15 @@ class ImageController extends GetxController{
     catch(e){
       MyDialog.showErrorDialog("Error in downloading image");
     }
-    downloadingAndSharingStatus.value = imageDownloadingAndSharingStatus.none;
+    _imageDownloading.value = false;
   }
   Future<void> shareImage() async{
     try{
-      downloadingAndSharingStatus.value = imageDownloadingAndSharingStatus.sharing;
+      _imageSharing.value = true;
       var imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
       var tempDir = await getTemporaryDirectory();
-      var imageFile = await File("${tempDir.path}/ai_generated_image.png").writeAsBytes(imageBytes);
+      imageFile = await File("${tempDir.path}/ai_generated_image.png").writeAsBytes(imageBytes);
+      print("imageFilePath : ${imageFile.path}");
       final params = ShareParams(
         text: 'ai generated image',
         files: [XFile(imageFile.path)],
@@ -112,6 +114,12 @@ class ImageController extends GetxController{
     catch(e){
       MyDialog.showErrorDialog("Error in sharing image");
     }
-    downloadingAndSharingStatus.value = imageDownloadingAndSharingStatus.none;
+    _imageSharing.value = false;
+  }
+  bool get getImageDownloadStatus{
+    return _imageDownloading.value;
+  }
+  bool get getImageSharingStatus{
+    return _imageSharing.value;
   }
 }

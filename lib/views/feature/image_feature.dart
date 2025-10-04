@@ -30,7 +30,11 @@ class _ImageFeatureState extends State<ImageFeature> {
                 onPressed: (){
                   _imageController.shareImage();
                 },
-                icon: Icon(Icons.share),
+                icon: Obx((){
+                  print("icon button build");
+                  return _imageController.getImageSharingStatus ? CircularProgressIndicator() :
+                  Icon(Icons.share);
+                }),
               ) : SizedBox();
             })
           ],
@@ -88,7 +92,8 @@ class _ImageFeatureState extends State<ImageFeature> {
           ),
           backgroundColor: Colors.blueAccent,
           child: Obx((){
-            return _imageController.downloadingAndSharingStatus.value == imageDownloadingAndSharingStatus.downloading ? CircularProgressIndicator()
+            print("download button build");
+            return _imageController.getImageDownloadStatus ? CircularProgressIndicator()
                 :
             Icon(Icons.download);
           })
