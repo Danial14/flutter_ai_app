@@ -1,5 +1,6 @@
 import "dart:convert";
 import 'dart:io';
+import "dart:typed_data";
 import "package:flutter/material.dart";
 import "package:flutter_ai_app/helper/mydialog.dart";
 import "package:get/get.dart";
@@ -19,9 +20,10 @@ class ImageController extends GetxController{
   static bool isFirstTimeAnimating = true;
   final textController = TextEditingController();
   String imageUrl = "";
-  var imageFile;
+  Uint8List? _imageBytes;
   void askQuestion() async{
     try {
+      _imageBytes = null;
       if (textController.text
           .trim()
           .isNotEmpty) {
@@ -80,8 +82,11 @@ class ImageController extends GetxController{
   Future<void> downloadImage() async{
     try{
       _imageDownloading.value = true;
-      var imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
-      var result = await ImageGallerySaverPlus.saveImage(imageBytes, name: "ai_generated_image");
+      if(_imageBytes == null) {
+        print("downloading image not for sharing");
+        _imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
+      }
+      var result = await ImageGallerySaverPlus.saveImage(_imageBytes!, name: "ai_generated_image");
       print(result);
       MyDialog.showSuccessDialog("Image succesfully downloaded");
     }
@@ -93,9 +98,13 @@ class ImageController extends GetxController{
   Future<void> shareImage() async{
     try{
       _imageSharing.value = true;
-      var imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
+      if(_imageBytes == null) {
+        print("downloading image for sharing");
+        _imageBytes = (await http.get(Uri.parse(imageUrl))).bodyBytes;
+      }
       var tempDir = await getTemporaryDirectory();
-      imageFile = await File("${tempDir.path}/ai_generated_image.png").writeAsBytes(imageBytes);
+      var imageFile = await File("${tempDir.path}/ai_generated_image.png")
+          .writeAsBytes(_imageBytes!);
       print("imageFilePath : ${imageFile.path}");
       final params = ShareParams(
         text: 'ai generated image',
