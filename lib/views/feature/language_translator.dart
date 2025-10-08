@@ -35,7 +35,7 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Get.bottomSheet(LanguageSheet());
+                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: _translateController.from,));
                     },
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     child: Container(
@@ -46,19 +46,33 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
                             border: Border.all(color: Colors.blue),
                             borderRadius: BorderRadius.circular(15)
                         ),
-                        child: const Text("Auto")
+                        child: Obx((){
+                          return _translateController.from.isEmpty ? const Text("Auto")
+                              :
+                          Text(_translateController.from.value);
+                        })
                     ),
                   ),
                   IconButton(onPressed: (){}, icon: Icon(Icons.repeat_rounded)),
-                  Container(
-                      width: size.width * 0.4,
-                      height: 50,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      child: const Text("To")
+                  InkWell(
+                    onTap: (){
+                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: _translateController.to,));
+                    },
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: Container(
+                        width: size.width * 0.4,
+                        height: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue),
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: Obx((){
+                          return _translateController.to.isEmpty ? const Text("To")
+                              :
+                          Text(_translateController.to.value);
+                        })
+                    ),
                   )
                 ]
             ),
