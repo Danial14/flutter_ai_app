@@ -35,7 +35,7 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: _translateController.from,));
+                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: "From",));
                     },
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     child: Container(
@@ -56,7 +56,7 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
                   IconButton(onPressed: (){}, icon: Icon(Icons.repeat_rounded)),
                   InkWell(
                     onTap: (){
-                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: _translateController.to,));
+                      Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: "To",));
                     },
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                     child: Container(
@@ -80,23 +80,42 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.01,
               vertical: size.height * 0.025
               ),
-              child: TextFormField(
-                controller: _translateController.textController,
-                minLines: 5,
-                maxLines: null,
-                //controller: _chatController.textController,
-                onTapOutside: (e){
-                  FocusScope.of(context).unfocus();
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    ),
-                    hintText: "Translate anything you want.",
-                    hintStyle: TextStyle(fontSize: 18.5,
-                    )
-                ),
+              child: /*Obx((){
+                return TextFormField(
+                  controller: _translateController.textController,
+                  minLines: 5,
+                  maxLines: null,
+                  //controller: _chatController.textController,
+                  onTapOutside: (e){
+                    FocusScope.of(context).unfocus();
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))
+                      ),
+                      hintText: "Translate anything you want.",
+                      hintStyle: TextStyle(fontSize: 18.5,
+                      )
+                  ),
+                );
+              })*/
+              TextFormField(
+              controller: _translateController.textController,
+              minLines: 5,
+              maxLines: null,
+              //controller: _chatController.textController,
+              onTapOutside: (e){
+                FocusScope.of(context).unfocus();
+              },
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  hintText: "Translate anything you want.",
+                  hintStyle: TextStyle(fontSize: 18.5,
+                  )
               ),
+            )
             ),
             if(_translateController.resultController.text.isNotEmpty)
               Padding(

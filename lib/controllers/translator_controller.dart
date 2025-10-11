@@ -195,14 +195,17 @@ class TranslatorController extends GetxController{
      "Chinese",
      "Zulu"
    ];
-  void askQuestion() async{
+  Future<String> translateText(String question, String to) async{
+    String translation = "";
     if(textController.text.trim().isNotEmpty){
-
-      textController.text = "";
+     translation = await APIs.getTranslation(question, to);
+     print("translation result: ${translation}");
+      textController.text = translation;
     }
     else{
       MyDialog.showInfoDialog("Please ask something");
     }
+    return translation;
   }
 
 }

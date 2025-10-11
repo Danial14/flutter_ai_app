@@ -5,15 +5,14 @@ import '../controllers/translator_controller.dart';
 
 class LanguageSheet extends StatelessWidget {
   final TranslatorController translatorController;
-  final RxString fromOrTo;
+  final String fromOrTo;
 
+  RxString _search = "".obs;
   LanguageSheet({super.key, required this.translatorController, required this.fromOrTo});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    RxString _search = "".obs;
-    print("build language sheet : ${fromOrTo.value}");
     return Container(
       padding: EdgeInsets.only(
         right: size.width * 0.04,
@@ -32,7 +31,6 @@ class LanguageSheet extends StatelessWidget {
           TextFormField(
             onChanged: (s){
               _search.value = s;
-              print("Search : ${s}");
             },
             onTapOutside: (_){
               FocusScope.of(context).unfocus();
@@ -54,14 +52,20 @@ class LanguageSheet extends StatelessWidget {
                 }).toList();
               }
               else{
-                print("empty search");
                 languages = translatorController.lang;
               }
               return ListView.builder(
               itemBuilder: (ctx, position){
     return InkWell(
-      onTap: (){
-        fromOrTo.value = languages[position];
+      onTap: () async{
+        if(fromOrTo.contains("From")){
+         // call translator api here
+          await translatorController.translateText(translatorController.textController.text, languages[position]);
+          translatorController.from.value = languages[position];
+        }
+        else{
+          translatorController.to.value = languages[position];
+        }
         Get.back();
       },
       child: Padding(
