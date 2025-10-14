@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_app/widgets/custom_loading.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/translator_controller.dart';
@@ -14,6 +15,7 @@ class LanguageTranslatorFeature extends StatefulWidget {
 
 class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
   final _translateController = TranslatorController();
+  final FocusNode _translatorFocusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -53,7 +55,17 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
                         })
                     ),
                   ),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.repeat_rounded)),
+                  IconButton(onPressed: (){
+                    if(_translateController.from.isNotEmpty && _translateController.to.isNotEmpty && _translateController.textController.text.isNotEmpty) {
+                      String temp = _translateController.from.value;
+                      _translateController.from.value =
+                          _translateController.to.value;
+                      _translateController.to.value = temp;
+                      _translateController.translateText(
+                          _translateController.textController.text,
+                          _translateController.from.value, false);
+                    }
+                  }, icon: Icon(Icons.repeat_rounded)),
                   InkWell(
                     onTap: (){
                       Get.bottomSheet(LanguageSheet(translatorController: _translateController, fromOrTo: "To",));
@@ -80,32 +92,14 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.01,
               vertical: size.height * 0.025
               ),
-              child: /*Obx((){
-                return TextFormField(
-                  controller: _translateController.textController,
-                  minLines: 5,
-                  maxLines: null,
-                  //controller: _chatController.textController,
-                  onTapOutside: (e){
-                    FocusScope.of(context).unfocus();
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))
-                      ),
-                      hintText: "Translate anything you want.",
-                      hintStyle: TextStyle(fontSize: 18.5,
-                      )
-                  ),
-                );
-              })*/
-              TextFormField(
+              child: TextFormField(
+                focusNode: _translatorFocusNode,
               controller: _translateController.textController,
               minLines: 5,
               maxLines: null,
               //controller: _chatController.textController,
               onTapOutside: (e){
-                FocusScope.of(context).unfocus();
+                _translatorFocusNode.unfocus();
               },
               decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -117,28 +111,40 @@ class _LanguageTranslatorFeatureState extends State<LanguageTranslatorFeature> {
               ),
             )
             ),
-            if(_translateController.resultController.text.isNotEmpty)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.01,
-                    vertical: size.height * 0.015
-                ),
-                child: TextFormField(
-                  controller: _translateController.resultController,
-                  onTapOutside: (e){
-                    FocusScope.of(context).unfocus();
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(20))
-                      )
+            Obx((){
+              if(_translateController.translationStatus.value == TranslationStatus.completed){
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.01,
+                      vertical: size.height * 0.015
                   ),
-                ),
-              ),
+                  child: TextFormField(
+                    controller: _translateController.resultController,
+                    onTapOutside: (e){
+                      FocusScope.of(context).unfocus();
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20))
+                        )
+                    ),
+                  ),
+                );
+              }
+              else if(_translateController.translationStatus.value == TranslationStatus.loading){
+                return SizedBox(height: 200,child: CustomLoading(),
+                );
+              }
+              else{
+                return SizedBox();
+              }
+            }),
             SizedBox(
               height: size.height * 0.1,
             ),
             CustomButton(
-              onTap: (){},
+              onTap: (){
+                _translateController.translateText(_translateController.textController.text, _translateController.to.value, true);
+              },
               text: "Translate",
             )
           ],

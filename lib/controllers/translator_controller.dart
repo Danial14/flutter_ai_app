@@ -5,12 +5,14 @@ import "package:get/get.dart";
 
 import "../helper/mydialog.dart";
 
+enum TranslationStatus {none, loading, completed}
 class TranslatorController extends GetxController{
   static bool isFirstTimeAnimating = true;
   final textController = TextEditingController();
   final resultController = TextEditingController();
   var from = "".obs;
   var to = "".obs;
+  Rx<TranslationStatus> translationStatus = TranslationStatus.none.obs;
   final lang = const [
     "Afar",
     "Abkhazian",
@@ -195,17 +197,36 @@ class TranslatorController extends GetxController{
      "Chinese",
      "Zulu"
    ];
-  Future<String> translateText(String question, String to) async{
+  Future<String> translateText(String question, String to, bool isTranslateButtonPressed) async{
     String translation = "";
-    if(textController.text.trim().isNotEmpty){
-     translation = await APIs.getTranslation(question, to);
-     print("translation result: ${translation}");
-      textController.text = translation;
+    if(!isTranslateButtonPressed) {
+      if (textController.text
+          .trim()
+          .isNotEmpty) {
+        translation = await APIs.getTranslation(question, to);
+        print("translation result: ${translation}");
+        textController.text = translation;
+      }
+      else {
+        MyDialog.showInfoDialog("Please translate something");
+      }
     }
     else{
-      MyDialog.showInfoDialog("Please ask something");
+      translationStatus.value = TranslationStatus.loading;
+      if (textController.text
+          .trim()
+          .isNotEmpty) {
+        translation = await APIs.getTranslation(question, to);
+        print("translation result: ${translation}");
+        resultController.text = translation;
+      }
+      else {
+        MyDialog.showInfoDialog("Please translate something");
+      }
+      translationStatus.value = TranslationStatus.completed;
     }
     return translation;
+
   }
 
 }

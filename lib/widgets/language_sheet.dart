@@ -60,7 +60,7 @@ class LanguageSheet extends StatelessWidget {
       onTap: () async{
         if(fromOrTo.contains("From")){
          // call translator api here
-          await translatorController.translateText(translatorController.textController.text, languages[position]);
+          await translatorController.translateText(translatorController.textController.text, languages[position], false);
           translatorController.from.value = languages[position];
         }
         else{
