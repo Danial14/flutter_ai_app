@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_ai_app/views/feature/video_feature.dart';
 import 'package:flutter_ai_app/views/splash.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
           )
         )
       ),
-      home: SplashScreen(),
+      home: VideoFeature(),
     );
   }
 }
